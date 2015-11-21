@@ -1,0 +1,22 @@
+{
+  "name": "msqoor/json",
+  "description": "This library implements the JSON API specification, refer to http://jsonapi.org/",
+  "require-dev": {
+    "phpunit/phpunit": "^5.0"
+  },
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Moath Almallahi",
+      "email": "msqoor@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Json\\": "src/",
+      "JsonTest\\": "test/"
+    }
+  },
+  "minimum-stability": "stable",
+  "require": {}
+}
