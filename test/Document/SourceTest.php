@@ -1,14 +1,14 @@
 <?php
 
-namespace JsonTest\Null;
+namespace JsonTest\Document;
 
 use JsonTest\AbstractedTestCase;
 
 /**
- * Class Null
- * @package Json
+ * Class SourceTest
+ * @package Json\Document
  */
-class DataTest extends AbstractedTestCase
+class SourceTest extends AbstractedTestCase
 {
     public function testMe()
     {

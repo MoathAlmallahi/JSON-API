@@ -3,11 +3,11 @@
 namespace Json;
 
 use Json\Exceptions\InvalidLinkException;
-use Json\Object\Links;
-use Json\Object\Meta;
-use Json\Object\Data;
-use Json\Object\Relationships;
-use Json\Object\Error\Source;
+use Json\Document\Links;
+use Json\Document\Meta;
+use Json\Document\Data;
+use Json\Document\Relationships;
+use Json\Document\Error\Source;
 
 /**
  * Class Factory
@@ -19,11 +19,11 @@ class Factory implements IFactory
     /**
      * @param string $name
      * @param string $href
-     * @param Object\Meta\Collection $meta
+     * @param Document\Meta\Collection $meta
      * @throws InvalidLinkException
      * @return Links
      */
-    public function createLinks($name, $href, Object\Meta\Collection $meta = null)
+    public function createLinks($name, $href, Document\Meta\Collection $meta = null)
     {
         return new Links($name, $href, $meta);
     }
@@ -52,6 +52,16 @@ class Factory implements IFactory
         Meta\Collection $metaCollection = null
     ) {
         return new Relationships($name, $linksCollection, $dataCollection, $metaCollection);
+    }
+
+    /**
+     * @param string $name
+     * @param array $relationships
+     * @return Relationships\Collection
+     */
+    public function createRelationshipsCollection($name, array $relationships)
+    {
+        return new Relationships\Collection($relationships);
     }
 
     /**

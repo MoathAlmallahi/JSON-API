@@ -1,15 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: moath
- * Date: 15.11.15
- * Time: 19:39
- */
 
 namespace Json\Exceptions;
 
-
-class InvalidErrorSourceException extends \Exception
+/**
+ * Class InvalidCollectionItemTypeException
+ * @package Json\Exceptions
+ */
+class InvalidDocumentLevelWrite extends \Exception
 {
 
     /**
@@ -18,7 +15,7 @@ class InvalidErrorSourceException extends \Exception
      * @param \Exception|null $previous
      */
     public function __construct(
-        $message = 'Invalid error source',
+        $message = 'Trying to append object of top level into an upper level',
         $code = 0,
         \Exception $previous = null
     ) {

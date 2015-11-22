@@ -2,9 +2,9 @@
 
 namespace Json;
 
-use Json\Object\Links\Collection as LinksCollection;
-use Json\Object\Meta\Collection as MetaCollection;
-use Json\Object\Relationships\Collection as RelationshipsCollection;
+use Json\Document\Links\Collection as LinksCollection;
+use Json\Document\Meta\Collection as MetaCollection;
+use Json\Document\Relationships\Collection as RelationshipsCollection;
 
 /**
  * Interface ISkeleton

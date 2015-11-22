@@ -18,48 +18,49 @@ class Document implements IRecursively
     const FIELD_INCLUDED = 'included';
 
     /**
-     * @var Object\Data\Collection
+     * @var Document\Data\Collection
      */
     private $dataCollection;
 
     /**
-     * @var Object\Error\Collection
+     * @var Document\Error\Collection
      */
     private $errorCollection;
 
     /**
-     * @var Object\Meta\Collection
+     * @var Document\Meta\Collection
      */
     private $metaCollection;
 
     /**
-     * @var Object\Links\Collection
+     * @var Document\Links\Collection
      */
     private $linksCollection;
 
     /**
-     * @var Object\Included\Collection
+     * @var Document\Included\Collection
      */
     private $includedCollection;
 
     /**
      * constructor
-     * @param Object\Data\Collection|null $dataCollection
-     * @param Object\Error\Collection|null $errorCollection
-     * @param Object\Meta\Collection|null $metaCollection
-     * @param Object\Links\Collection|null $linksCollection
-     * @param Object\Included\Collection|null $includedCollection
+     * @param Document\Data\Collection|null $dataCollection
+     * @param Document\Error\Collection|null $errorCollection
+     * @param Document\Meta\Collection|null $metaCollection
+     * @param Document\Links\Collection|null $linksCollection
+     * @param Document\Included\Collection|null $includedCollection
      * @throws InvalidJsonApiDocumentException
      */
     public function __construct(
-        Object\Data\Collection $dataCollection = null,
-        Object\Error\Collection $errorCollection = null,
-        Object\Meta\Collection $metaCollection = null,
-        Object\Links\Collection $linksCollection = null,
-        Object\Included\Collection $includedCollection = null
+        Document\Data\Collection $dataCollection = null,
+        Document\Error\Collection $errorCollection = null,
+        Document\Meta\Collection $metaCollection = null,
+        Document\Links\Collection $linksCollection = null,
+        Document\Included\Collection $includedCollection = null
     ) {
         if (
-            null === $dataCollection && null === $errorCollection && null === $metaCollection
+            (null === $dataCollection && null === $errorCollection && null === $metaCollection) ||
+            (null !== $dataCollection && null !== $errorCollection)
         ) {
             throw new InvalidJsonApiDocumentException;
         }
@@ -72,7 +73,7 @@ class Document implements IRecursively
     }
 
     /**
-     * @return Object\Data\Collection
+     * @return Document\Data\Collection
      */
     public function getDataCollection()
     {
@@ -80,7 +81,7 @@ class Document implements IRecursively
     }
 
     /**
-     * @return Object\Error\Collection
+     * @return Document\Error\Collection
      */
     public function getErrorCollection()
     {
@@ -88,7 +89,7 @@ class Document implements IRecursively
     }
 
     /**
-     * @return Object\Meta\Collection
+     * @return Document\Meta\Collection
      */
     public function getMetaCollection()
     {
@@ -96,7 +97,7 @@ class Document implements IRecursively
     }
 
     /**
-     * @return Object\Links\Collection
+     * @return Document\Links\Collection
      */
     public function getLinksCollection()
     {
@@ -104,7 +105,7 @@ class Document implements IRecursively
     }
 
     /**
-     * @return Object\Included\Collection
+     * @return Document\Included\Collection
      */
     public function getIncludedCollection()
     {

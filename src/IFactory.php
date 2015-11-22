@@ -3,11 +3,11 @@
 namespace Json;
 
 use Json\Exceptions\InvalidLinkException;
-use Json\Object\Data;
-use Json\Object\Links;
-use Json\Object\Meta;
-use Json\Object\Relationships;
-use Json\Object\Error\Source;
+use Json\Document\Data;
+use Json\Document\Links;
+use Json\Document\Meta;
+use Json\Document\Relationships;
+use Json\Document\Error\Source;
 
 /**
  * Interface IFactory
@@ -19,11 +19,11 @@ interface IFactory
     /**
      * @param string $name
      * @param string $href
-     * @param Object\Meta\Collection $meta
+     * @param Document\Meta\Collection $meta
      * @throws InvalidLinkException
      * @return Links
      */
-    public function createLinks($name, $href, Object\Meta\Collection $meta = null);
+    public function createLinks($name, $href, Document\Meta\Collection $meta = null);
 
     /**
      * @param string $name
@@ -35,15 +35,25 @@ interface IFactory
     /**
      * @param string $name
      * @param Links\Collection|null $linksCollection
-     * @param Object\Data\Collection|null $dataCollection
+     * @param Document\Data\Collection|null $dataCollection
      * @param Meta\Collection|null $metaCollection
      * @return Relationships
      */
     public function createRelationships(
         $name,
         Links\Collection $linksCollection = null,
-        Object\Data\Collection $dataCollection = null,
+        Document\Data\Collection $dataCollection = null,
         Meta\Collection $metaCollection = null
+    );
+
+    /**
+     * @param string $name
+     * @param array $relationships
+     * @return Relationships\Collection
+     */
+    public function createRelationshipsCollection(
+        $name,
+        array $relationships
     );
 
     /**
@@ -55,7 +65,7 @@ interface IFactory
 
     /**
      * @param Data[] $data
-     * @return Object\Data\Collection
+     * @return Document\Data\Collection
      */
     public function createDataCollection(array $data);
 
