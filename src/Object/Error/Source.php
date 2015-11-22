@@ -1,15 +1,19 @@
 <?php
 
-namespace Json\Object;
+namespace Json\Object\Error;
 
 use Json\Exceptions\InvalidErrorSourceException;
+use Json\IRecursively;
 
 /**
  * Class Source
  * @package Json\Object
  */
-class Source
+class Source implements IRecursively
 {
+
+    const FIELD_POINTER = 'pointer';
+    const FIELD_PARAMETER = 'parameter';
 
     /**
      * @var string
@@ -50,5 +54,28 @@ class Source
         }
         $this->pointer = $pointer;
         $this->parameter = $parameter;
+    }
+
+    /**
+     * Returns json encoded value or null
+     * @return string|null
+     */
+    public function getAsJson()
+    {
+        return json_encode($this->getAsArray());
+    }
+
+    /**
+     * Returns the json as array
+     * @return array
+     */
+    public function getAsArray()
+    {
+        $source = [
+            static::FIELD_POINTER => $this->getPointer(),
+            static::FIELD_PARAMETER => $this->getParameter()
+        ];
+
+        return array_filter($source);
     }
 }

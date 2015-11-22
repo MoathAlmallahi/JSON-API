@@ -12,7 +12,7 @@ use Json\IRecursively;
 class Links implements IRecursively
 {
 
-    const FIELD_META = 'meta';
+    const FIELD_META = 'metaCollection';
     const FIELD_HREF = 'href';
 
     /**
@@ -28,7 +28,7 @@ class Links implements IRecursively
     /**
      * @var Meta\Collection|null
      */
-    private $meta;
+    private $metaCollection;
 
     /**
      * @return string
@@ -51,43 +51,27 @@ class Links implements IRecursively
      */
     public function getMeta()
     {
-        return $this->meta;
+        return $this->metaCollection;
     }
 
     /**
      * Initialize and inject the link object with the specified data
      * @param string $name
      * @param string $href
-     * @param Meta\Collection|null $meta
+     * @param Meta\Collection|null $metaCollection
      * @throws InvalidLinkException
      */
-    public function __construct($name, $href = null, Meta\Collection $meta = null)
+    public function __construct($name, $href = null, Meta\Collection $metaCollection = null)
     {
-        if (!isset($href) && !isset($meta)) {
+        if (
+            (!isset($href) && !isset($metaCollection)) ||
+            !is_string($name)
+        ) {
             throw new InvalidLinkException;
         }
         $this->name = $name;
         $this->href = $href;
-        $this->meta = $meta;
-    }
-
-    /**
-     * Converts the link object to an array
-     * @return array
-     */
-    public function toArray()
-    {
-        if (null === $this->meta) {
-            return [
-                $this->getName() => $this->getHref()
-            ];
-        }
-        return [
-            $this->getName() => [
-                static::FIELD_HREF => $this->getHref(),
-                static::FIELD_META => $this->getMeta()
-            ]
-        ];
+        $this->metaCollection = $metaCollection;
     }
 
     /**

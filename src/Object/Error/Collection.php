@@ -1,24 +1,25 @@
 <?php
 
-namespace Json\Object\Meta;
+namespace Json\Object\Error;
 
+use Json\Object\Error;
 use Json\Object\AbstractCollection;
-use Json\Object\Meta;
 
 /**
  * Class Collection
- * @package Json\Object\Meta
+ * @package Json\Object\Error
  */
 class Collection extends AbstractCollection
 {
-    const COLLECTION_NAME = 'meta';
+
+    const COLLECTION_NAME = 'errors';
 
     /**
-     * @param Meta $element
+     * @param Error $element
      * @return bool
      */
     protected function validateType($element)
     {
-        return ($element instanceof Meta);
+        return ($element instanceof Error);
     }
 }

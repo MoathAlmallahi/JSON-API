@@ -1,18 +1,27 @@
 <?php
 
-namespace Json;
+namespace Json\Object;
 
+use Json\IRecursively;
+use Json\Object\Error\Source;
 use Json\Object\Links\Collection as LinksCollection;
 use Json\Object\Meta\Collection as MetaCollections;
-use Json\Object\Source;
 
 /**
  * Class Error
  * @package Json\Object
  */
-class Error implements IIRecursively
+class Error implements IRecursively
 {
 
+    const FIELD_ID = 'id';
+    const FIELD_LINKS = 'links';
+    const FIELD_STATUS = 'status';
+    const FIELD_CODE = 'code';
+    const FIELD_TITLE = 'title';
+    const FIELD_DETAIL = 'detail';
+    const FIELD_SOURCE = 'source';
+    const FIELD_META = 'meta';
     /**
      * @var mixed
      */
@@ -44,7 +53,7 @@ class Error implements IIRecursively
     private $detail;
 
     /**
-     * @var Source|null
+     * @var Error\Source|null
      */
     private $source;
 
@@ -86,11 +95,95 @@ class Error implements IIRecursively
     }
 
     /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return LinksCollection|null
+     */
+    public function getLinks()
+    {
+        return $this->links;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDetail()
+    {
+        return $this->detail;
+    }
+
+    /**
+     * @return Source|null
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * @return MetaCollections|null
+     */
+    public function getMeta()
+    {
+        return $this->meta;
+    }
+
+    /**
      * Returns json encoded value or null
      * @return string|null
      */
     public function getAsJson()
     {
-        // TODO: Implement getAsJson() method.
+        return json_encode($this->getAsArray());
+    }
+
+    /**
+     * Returns the json as array
+     * @return array
+     */
+    public function getAsArray()
+    {
+        $error = [
+            static::FIELD_ID => $this->getId(),
+            static::FIELD_LINKS => $this->getLinks()->getAsArray(),
+            static::FIELD_STATUS => $this->getStatus(),
+            static::FIELD_CODE => $this->getCode(),
+            static::FIELD_TITLE => $this->getTitle(),
+            static::FIELD_DETAIL => $this->getDetail(),
+            static::FIELD_SOURCE => $this->getSource()->getAsArray(),
+            static::FIELD_META => $this->getMeta()->getAsArray()
+        ];
+
+        return array_filter($error);
     }
 }

@@ -1,19 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: moath
- * Date: 15.11.15
- * Time: 18:17
- */
 
 namespace Json;
-
 
 use Json\Object\Links\Collection as LinksCollection;
 use Json\Object\Meta\Collection as MetaCollection;
 use Json\Object\Relationships\Collection as RelationshipsCollection;
 
-
+/**
+ * Interface ISkeleton
+ * @package Json
+ */
 interface ISkeleton
 {
 
@@ -46,6 +42,4 @@ interface ISkeleton
      * @return MetaCollection|null
      */
     public function getMeta();
-
-
 }

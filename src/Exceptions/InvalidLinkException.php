@@ -15,7 +15,7 @@ class InvalidLinkException extends \Exception
      * @param \Exception|null $previous
      */
     public function __construct(
-        $message = 'Link object should contain at least Href or Meta',
+        $message = 'Link object should contain at least Href or Meta and a name of type string',
         $code = 0,
         \Exception $previous = null
     ) {

@@ -1,24 +1,23 @@
 <?php
 
-namespace Json\Object\Meta;
+namespace Json\Object\Included;
 
 use Json\Object\AbstractCollection;
-use Json\Object\Meta;
+use Json\Object\Data;
 
 /**
  * Class Collection
- * @package Json\Object\Meta
+ * @package Json\Object\Included
  */
 class Collection extends AbstractCollection
 {
-    const COLLECTION_NAME = 'meta';
-
+    const COLLECTION_NAME = 'included';
     /**
-     * @param Meta $element
+     * @param Data\Collection $element
      * @return bool
      */
     protected function validateType($element)
     {
-        return ($element instanceof Meta);
+        return ($element instanceof Data);
     }
 }

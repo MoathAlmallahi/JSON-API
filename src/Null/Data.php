@@ -6,13 +6,13 @@ use Json\ISkeleton;
 use Json\Object\Links\Collection as LinksCollection;
 use Json\Object\Meta\Collection as MetaCollection;
 use Json\Object\Relationships\Collection as RelationshipsCollection;
-use Json\IIRecursively;
+use Json\IRecursively;
 
 /**
  * Class Null
  * @package Json
  */
-class Data implements ISkeleton, IIRecursively
+class Data implements ISkeleton, IRecursively
 {
 
     /**
@@ -68,6 +68,15 @@ class Data implements ISkeleton, IIRecursively
      * @return string|null
      */
     public function getAsJson()
+    {
+        return null;
+    }
+
+    /**
+     * Returns the json as array
+     * @return array
+     */
+    public function getAsArray()
     {
         return null;
     }

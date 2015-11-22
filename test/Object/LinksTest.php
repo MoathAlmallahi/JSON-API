@@ -29,8 +29,6 @@ class LinksTest extends AbstractedTestCase
         $this->assertArrayHasKey($name, $jsonArray);
         $this->assertArrayHasKey($name, $jsonArray);
         $this->assertArrayNotHasKey(Links::FIELD_META, $jsonArray);
-
-        return $links;
     }
 
     /**
@@ -40,17 +38,19 @@ class LinksTest extends AbstractedTestCase
     {
         $name = 'self';
         $href = 'http://www.github.com';
-        $meta = $this->createMetaCollection();
-        $links = new Links($name, $href, $meta);
+
+        $meta1 = $this->getJsonFactory()->createMeta('meta1', 'value of meta1');
+        $meta2 = $this->getJsonFactory()->createMeta('meta2', 'value of meta2');
+        $metaCollection = $this->getJsonFactory()->createMetaCollection([$meta1, $meta2]);
+
+        $links = new Links($name, $href, $metaCollection);
 
         $this->assertEquals($name, $links->getName());
         $this->assertEquals($href, $links->getHref());
-        $this->assertEquals($meta, $links->getMeta());
+        $this->assertEquals($metaCollection, $links->getMeta());
         $this->assertArrayHasKey($name, $links->getAsArray());
         $this->assertArrayHasKey(Links::FIELD_HREF, $links->getAsArray()[$name]);
         $this->assertArrayHasKey(Links::FIELD_META, $links->getAsArray()[$name]);
-
-        return $links;
     }
 
     /**
@@ -60,12 +60,16 @@ class LinksTest extends AbstractedTestCase
     {
         $name = 'self';
         $href = null;
-        $meta = $this->createMetaCollection();
-        $links = new Links($name, $href, $meta);
+
+        $meta1 = $this->getJsonFactory()->createMeta('meta1', 'value of meta1');
+        $meta2 = $this->getJsonFactory()->createMeta('meta2', 'value of meta2');
+        $metaCollection = $this->getJsonFactory()->createMetaCollection([$meta1, $meta2]);
+
+        $links = new Links($name, $href, $metaCollection);
 
         $this->assertEquals($name, $links->getName());
         $this->assertEquals($href, $links->getHref());
-        $this->assertEquals($meta, $links->getMeta());
+        $this->assertEquals($metaCollection, $links->getMeta());
         $this->assertArrayHasKey($name, $links->getAsArray());
         $this->assertArrayNotHasKey(Links::FIELD_HREF, $links->getAsArray()[$name]);
         $this->assertArrayHasKey(Links::FIELD_META, $links->getAsArray()[$name]);

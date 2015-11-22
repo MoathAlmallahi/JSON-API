@@ -2,7 +2,6 @@
 
 namespace Json\Object;
 
-use Json\Data;
 use Json\Exceptions\InvalidRelationshipsException;
 use Json\IRecursively;
 use Json\Object\Data\Collection as DataCollection;
@@ -32,19 +31,30 @@ class Relationships implements IRecursively
     private $metaCollection;
 
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @param string $name
      * @param LinksCollection|null $linksCollection
      * @param DataCollection|null $dataCollection
      * @param MetaCollection|null $metaCollection
      * @throws InvalidRelationshipsException
      */
     public function __construct(
+        $name,
         LinksCollection $linksCollection = null,
         DataCollection $dataCollection = null,
         MetaCollection $metaCollection = null
     ) {
-        if (null === $linksCollection && null === $dataCollection && null === $metaCollection) {
+        if (
+            (null === $linksCollection && null === $dataCollection && null === $metaCollection) ||
+            !is_string($name)
+        ) {
             throw new InvalidRelationshipsException;
         }
+        $this->name = $name;
         $this->linksCollection = $linksCollection;
         $this->dataCollection = $dataCollection;
         $this->metaCollection = $metaCollection;
@@ -98,5 +108,4 @@ class Relationships implements IRecursively
     {
         return $this->metaCollection;
     }
-
 }

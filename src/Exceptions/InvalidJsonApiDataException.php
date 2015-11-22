@@ -6,7 +6,7 @@ namespace Json\Exceptions;
  * Class InvalidJsonApiDocument
  * @package Json\Exceptions
  */
-class InvalidJsonApiDocumentException extends \Exception
+class InvalidJsonApiDataException extends \Exception
 {
 
     /**
@@ -15,7 +15,7 @@ class InvalidJsonApiDocumentException extends \Exception
      * @param \Exception|null $previous
      */
     public function __construct(
-        $message = 'Trying to set an invalid JsonApi document, document should have $meta, $links or errors',
+        $message = 'Trying to set an invalid JsonApi document, $type or $id should be set.',
         $code = 0,
         \Exception $previous = null
     ) {

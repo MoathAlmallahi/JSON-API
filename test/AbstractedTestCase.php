@@ -2,9 +2,7 @@
 
 namespace JsonTest;
 
-use Json\Object\Links;
-use Json\Object\Meta;
-use Json\Object\Relationships;
+use Json\Factory;
 
 /**
  * Class Abstracted
@@ -12,55 +10,26 @@ use Json\Object\Relationships;
  */
 abstract class AbstractedTestCase extends \PHPUnit_Framework_TestCase
 {
+    private $jsonFactory;
 
     /**
-     * @return Links\Collection
+     * constructor
+     * @param null $name
+     * @param array $data
+     * @param string $dataName
      */
-    protected function createLinksCollectionWithoutMeta()
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
-        $links = [];
-        $links[] = new Links('self', 'http://www.github.com');
-        $links[] = new Links('self', 'http://www.bitbucket.com');
+        parent::__construct($name, $data, $dataName);
 
-        return new Links\Collection($links);
+        $this->jsonFactory = new Factory();
     }
 
     /**
-     * @return Links\Collection
+     * @return Factory
      */
-    protected function createLinksCollectionWithMeta()
+    protected function getJsonFactory()
     {
-        $links = [];
-        $links[] = new Links('self', 'http://www.github.com', $this->createMetaCollection());
-        $links[] = new Links('self', 'http://www.bitbucket.com');
-
-        return new Links\Collection($links);
-    }
-
-    /**
-     * @return Meta\Collection
-     */
-    protected function createMetaCollection()
-    {
-        $meta = [];
-        $meta[] = new Meta('field', 'some value');
-        $meta[] = new Meta('authors', ['Beggie', 'SnoopDogg', 'Notorious']);
-
-        return new Meta\Collection($meta);
-    }
-
-    /**
-     *
-     */
-    protected function createRelationshipsCollection()
-    {
-        $relationships = [];
-        $relationships[] = new Relationships(
-            $this->createLinksCollectionWithMeta(),
-            $this->createDataCollection(),
-            $this->createMetaCollection()
-        );
-
-        return $relationships;
+        return $this->jsonFactory;
     }
 }

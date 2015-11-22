@@ -1,8 +1,10 @@
 <?php
 
-namespace Json;
+namespace Json\Object;
 
-use Json\Exceptions\InvalidJsonApiDocumentException;
+use Json\Exceptions\InvalidJsonApiDataException;
+use Json\IRecursively;
+use Json\ISkeleton;
 use Json\Object\Links;
 use Json\Object\Meta;
 use Json\Object\Relationships;
@@ -107,21 +109,21 @@ class Data implements ISkeleton, IRecursively
      * @param Relationships\Collection|null $relationships
      * @param Links\Collection|null $links
      * @param Meta\Collection|null $meta
-     * @throws InvalidJsonApiDocumentException
+     * @throws InvalidJsonApiDataException
      */
     public function __construct(
         $type,
         $id,
         array $attributes = null,
-        Object\Relationships\Collection $relationships,
-        Object\Links\Collection $links,
-        Object\Meta\Collection $meta
+        Relationships\Collection $relationships,
+        Links\Collection $links,
+        Meta\Collection $meta
     ) {
         if (
             (null === $type && null === $id) ||
             (null === $relationships && null === $links && null === $meta)
         ) {
-            throw new InvalidJsonApiDocumentException;
+            throw new InvalidJsonApiDataException;
         }
         $this->type = $type;
         $this->id = $id;

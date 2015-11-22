@@ -12,15 +12,15 @@ use JsonTest\AbstractedTestCase;
 class CollectionTest extends AbstractedTestCase
 {
     /**
-     * @depends LinksTest::testSuccessfulWithoutMeta
-     * @depends LinksTest::testSuccessfulWithMeta
-     * @param Links $linksWithoutMeta
-     * @param Links $linksWithMeta
-     * @return Links\Collection
+     * test creating a links collection successfully
      */
-    public function testCreateSuccessfulCollection($linksWithoutMeta, $linksWithMeta)
+    public function testCreateSuccessfulCollection()
     {
-        $linksCollection = new Links\Collection([$linksWithMeta, $linksWithoutMeta]);
+        $link1 = $this->getJsonFactory()->createLinks('link1', 'http://www.github.com');
+        $link2 = $this->getJsonFactory()->createLinks('link1', 'http://www.github.com');
+
+        $linksCollection = new Links\Collection([$link1, $link2]);
+
         $this->assertEquals(2, $linksCollection->count());
         $this->assertEquals(2, count($linksCollection));
 
