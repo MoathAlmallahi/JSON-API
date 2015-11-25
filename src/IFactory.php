@@ -2,6 +2,7 @@
 
 namespace Json;
 
+use Json\Document\Error;
 use Json\Exceptions\InvalidLinkException;
 use Json\Document\Data;
 use Json\Document\Links;
@@ -15,6 +16,22 @@ use Json\Document\Error\Source;
  */
 interface IFactory
 {
+
+    /**
+     * @param string|null $type
+     * @param mixed $id
+     * @param array $attributes
+     * @param \Json\Document\Relationships\Collection $relationships
+     * @param \Json\Document\Links\Collection $links
+     * @param \Json\Document\Meta\Collection $meta
+     */
+    public function createData(
+        $type = null,
+        $id = null,
+        array $attributes = null,
+        Relationships\Collection $relationships = null,
+        Links\Collection $links = null,
+        Meta\Collection $meta = null);
 
     /**
      * @param string $name
@@ -47,14 +64,18 @@ interface IFactory
     );
 
     /**
-     * @param string $name
      * @param array $relationships
      * @return Relationships\Collection
      */
     public function createRelationshipsCollection(
-        $name,
         array $relationships
     );
+
+    /**
+     * @param array $errors
+     * @return Error/Collection
+     */
+    public function createErrorsCollection(array $errors);
 
     /**
      * @param string $pointer
@@ -80,4 +101,20 @@ interface IFactory
      * @return Meta\Collection
      */
     public function createMetaCollection(array $metaArray);
+
+    /**
+     * @param Data\Collection|null $dataCollection
+     * @param Document\Error\Collection|null $errorsCollection
+     * @param Meta\Collection|null $metaCollection
+     * @param Links\Collection|null $linksCollection
+     * @param Document\Included\Collection|null $includedCollection
+     * @return Document
+     */
+    public function createDocument(
+        Document\Data\Collection $dataCollection = null,
+        Document\Error\Collection $errorsCollection = null,
+        Document\Meta\Collection $metaCollection = null,
+        Document\Links\Collection $linksCollection = null,
+        Document\Included\Collection $includedCollection = null
+    );
 }

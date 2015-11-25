@@ -44,7 +44,11 @@ abstract class AbstractCollection implements \Iterator, \Countable, IRecursively
                 throw new InvalidCollectionItemTypeException;
             }
 
-            $this->items[$item->getName()] = $item;
+            if (is_callable([$item, 'getName'])) {
+                $this->items[$item->getName()] = $item;
+            } else {
+                $this->items[] = $item;
+            }
         }
 
         $this->positions = array_keys($this->items);

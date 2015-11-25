@@ -67,9 +67,9 @@ class Data implements ISkeleton, IRecursively
         $type = null,
         $id = null,
         array $attributes = null,
-        Relationships\Collection $relationships,
-        Links\Collection $links,
-        Meta\Collection $meta
+        Relationships\Collection $relationships = null,
+        Links\Collection $links = null,
+        Meta\Collection $meta = null
     ) {
         if (
             (null === $type && null === $id) ||
@@ -153,9 +153,12 @@ class Data implements ISkeleton, IRecursively
             static::FIELD_TYPE => $this->getType(),
             static::FIELD_ID => $this->getId(),
             static::FIELD_ATTRIBUTES => $this->getAttributes(),
-            static::FIELD_RELATIONSHIPS => $this->getRelationships()->getAsArray(),
-            static::FIELD_LINKS => $this->getLinks()->getAsArray(),
-            static::FIELD_META => $this->getMeta()->getAsArray()
+            static::FIELD_RELATIONSHIPS => null !== $this->getRelationships() ?
+                $this->getRelationships()->getAsArray() : null,
+            static::FIELD_LINKS => null !== $this->getLinks() ?
+                $this->getLinks()->getAsArray() : null,
+            static::FIELD_META => null !== $this->getMeta() ?
+                $this->getMeta()->getAsArray() : null
         ];
 
         return array_filter($data);

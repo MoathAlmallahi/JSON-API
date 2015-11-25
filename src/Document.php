@@ -60,7 +60,8 @@ class Document implements IRecursively
     ) {
         if (
             (null === $dataCollection && null === $errorCollection && null === $metaCollection) ||
-            (null !== $dataCollection && null !== $errorCollection)
+            (null !== $dataCollection && null !== $errorCollection) ||
+            (null === $dataCollection && null !== $includedCollection)
         ) {
             throw new InvalidJsonApiDocumentException;
         }
@@ -128,11 +129,16 @@ class Document implements IRecursively
     public function getAsArray()
     {
         $document = [
-            static::FIELD_DATA => $this->getDataCollection()->getAsArray(),
-            static::FIELD_ERRORS => $this->getErrorCollection()->getAsArray(),
-            static::FIELD_META => $this->getMetaCollection()->getAsArray(),
-            static::FIELD_LINKS => $this->getLinksCollection()->getAsArray(),
-            static::FIELD_INCLUDED => $this->getIncludedCollection()->getAsArray()
+            static::FIELD_DATA => null !== $this->getDataCollection() ?
+                $this->getDataCollection()->getAsArray() : null,
+            static::FIELD_ERRORS => null !== $this->getErrorCollection() ?
+                $this->getErrorCollection()->getAsArray() : null,
+            static::FIELD_META => null !== $this->getMetaCollection() ?
+                $this->getMetaCollection()->getAsArray() : null,
+            static::FIELD_LINKS => null !== $this->getLinksCollection() ?
+                $this->getLinksCollection()->getAsArray() : null,
+            static::FIELD_INCLUDED => null !== $this->getIncludedCollection() ?
+                $this->getIncludedCollection()->getAsArray() : null
         ];
 
         return array_filter($document);

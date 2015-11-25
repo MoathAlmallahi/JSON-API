@@ -10,18 +10,12 @@ use Json\IRecursively;
  * Class Builder
  * @package Json\Document
  */
-class Builder
+class Builder implements IBuilder
 {
-
     /**
      * @var IFactory
      */
     private $factory;
-
-    /**
-     * @var IBuilder
-     */
-    private $builder;
 
     /**
      * @var array
@@ -41,13 +35,12 @@ class Builder
     public function __construct(IFactory $factory, IBuilder $builder = null)
     {
         $this->factory = $factory;
-        $this->builder = $builder;
     }
 
     /**
      * @return Data\Builder
      */
-    public function getDataBuilder()
+    public function getDataCollectionBuilder()
     {
         return new Data\Builder($this->factory, $this);
     }
@@ -56,7 +49,7 @@ class Builder
      * @param IRecursively $data
      * @return Builder
      */
-    public function addData(IRecursively $data)
+    public function addDataCollection(IRecursively $data)
     {
         $this->document[Document::FIELD_DATA][] = $data;
 
@@ -64,47 +57,80 @@ class Builder
     }
 
     /**
-     * @param IRecursively $errors
+     * @return Error\Builder
+     */
+    public function getErrorsCollectionBuilder()
+    {
+        return new Error\Builder($this->factory, $this);
+    }
+
+    /**
+     * @param Error\Collection $errorsCollection
      * @return Builder
      */
-    public function addErrors(IRecursively $errors)
+    public function addErrorsCollection(Error\Collection $errorsCollection)
     {
-        $this->document[Document::FIELD_ERRORS][] = $errors;
+        $this->document[Document::FIELD_ERRORS][] = $errorsCollection;
 
         return $this;
     }
 
     /**
-     * @param IRecursively $meta
+     * @return Meta\Builder
+     */
+    public function getMetaCollectionBuilder()
+    {
+        return new Meta\Builder($this->factory, $this);
+    }
+
+    /**
+     * @param Meta\Collection $metaCollection
      * @return Builder
      */
-    public function addMeta(IRecursively $meta)
+    public function addMetaCollection(Meta\Collection $metaCollection)
     {
-        $this->document[Document::FIELD_META][] = $meta;
+        $this->document[Document::FIELD_META] = $metaCollection;
 
         return $this;
     }
 
     /**
-     * @param IRecursively $links
+     * @param Links\Collection $linksCollection
      * @return Builder
      */
-    public function addLinks(IRecursively $links)
+    public function addLinksCollection(Links\Collection $linksCollection)
     {
-        $this->document[Document::FIELD_LINKS][] = $links;
+        $this->document[Document::FIELD_LINKS] = $linksCollection;
 
         return $this;
     }
 
     /**
-     * @param IRecursively $included
+     * @return Links\Builder
+     */
+    public function getLinksCollectionBuilder()
+    {
+        return new Links\Builder($this->factory, $this);
+    }
+
+    /**
+     * @param Included\Collection $includedCollection
      * @return Builder
      */
-    public function addIncluded(IRecursively $included)
+    public function addIncludedCollection(Included\Collection $includedCollection)
     {
-        $this->document[Document::FIELD_INCLUDED][] = $included;
+        $this->document[Document::FIELD_INCLUDED] = $includedCollection;
 
         return $this;
+    }
+
+    /**
+     *
+     * @return Included\Builder
+     */
+    public function getIncludedCollectionBuilder()
+    {
+        return new Included\Builder($this->factory, $this);
     }
 
     /**
@@ -112,12 +138,19 @@ class Builder
      */
     public function getDocument()
     {
-        return new Document(
-            new Data\Collection($this->document[Document::FIELD_DATA]),
-            new Error\Collection($this->document[Document::FIELD_ERRORS]),
-            new Meta\Collection($this->document[Document::FIELD_META]),
-            new Links\Collection($this->document[Document::FIELD_LINKS]),
-            new Included\Collection($this->document[Document::FIELD_INCLUDED])
+        return $this->factory->createDocument(
+            null !== $this->document[Document::FIELD_DATA] ?
+                $this->factory->createDataCollection($this->document[Document::FIELD_DATA]) : null,
+            null !== $this->document[Document::FIELD_ERRORS] ?
+                $this->factory->createErrorsCollection($this->document[Document::FIELD_ERRORS]) : null,
+            $this->document[Document::FIELD_META],
+            $this->document[Document::FIELD_LINKS],
+            $this->document[Document::FIELD_INCLUDED]
         );
+    }
+
+    public function addToParent()
+    {
+        return;
     }
 }

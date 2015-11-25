@@ -8,6 +8,7 @@ use Json\Document\Meta;
 use Json\Document\Data;
 use Json\Document\Relationships;
 use Json\Document\Error\Source;
+use Json\Utils\Helper;
 
 /**
  * Class Factory
@@ -55,13 +56,16 @@ class Factory implements IFactory
     }
 
     /**
-     * @param string $name
      * @param array $relationships
      * @return Relationships\Collection
      */
-    public function createRelationshipsCollection($name, array $relationships)
+    public function createRelationshipsCollection(array $relationships)
     {
-        return new Relationships\Collection($relationships);
+        if (null !== $relationships && !empty($relationships)) {
+            return new Relationships\Collection($relationships);
+        }
+
+        return null;
     }
 
     /**
@@ -80,7 +84,11 @@ class Factory implements IFactory
      */
     public function createDataCollection(array $data)
     {
-        return new Data\Collection($data);
+        if (null !== $data && !empty($data)) {
+            return new Data\Collection($data);
+        }
+
+        return null;
     }
 
     /**
@@ -89,7 +97,11 @@ class Factory implements IFactory
      */
     public function createLinksCollection(array $links)
     {
-        return new Links\Collection($links);
+        if (null !== $links && !empty($links)) {
+            return new Links\Collection($links);
+        }
+
+        return null;
     }
 
     /**
@@ -98,6 +110,68 @@ class Factory implements IFactory
      */
     public function createMetaCollection(array $metaArray)
     {
-        return new Meta\Collection($metaArray);
+        if (null !== $metaArray && !empty($metaArray)) {
+            return new Meta\Collection($metaArray);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $type
+     * @param mixed $id
+     * @param array $attributes
+     * @param \Json\Document\Relationships\Collection $relationships
+     * @param \Json\Document\Links\Collection $links
+     * @param \Json\Document\Meta\Collection $meta
+     * @return Data
+     */
+    public function createData(
+        $type = null,
+        $id = null,
+        array $attributes = null,
+        Document\Relationships\Collection $relationships = null,
+        Document\Links\Collection $links = null,
+        Document\Meta\Collection $meta = null
+    ) {
+        return new Data($type, $id, $attributes, $relationships, $links, $meta);
+    }
+
+    /**
+     * @param array $errors
+     * @return Document\Error\Collection
+     */
+    public function createErrorsCollection(
+        array $errors
+    ) {
+        if (null !== $errors && !empty($errors)) {
+            return new Document\Error\Collection($errors);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Data\Collection|null $dataCollection
+     * @param Document\Error\Collection|null $errorsCollection
+     * @param Meta\Collection|null $metaCollection
+     * @param Links\Collection|null $linksCollection
+     * @param Document\Included\Collection|null $includedCollection
+     * @return Document
+     */
+    public function createDocument(
+        Document\Data\Collection $dataCollection = null,
+        Document\Error\Collection $errorsCollection = null,
+        Document\Meta\Collection $metaCollection = null,
+        Document\Links\Collection $linksCollection = null,
+        Document\Included\Collection $includedCollection = null
+    ) {
+        return new Document(
+            $dataCollection,
+            $errorsCollection,
+            $metaCollection,
+            $linksCollection,
+            $includedCollection
+        );
     }
 }

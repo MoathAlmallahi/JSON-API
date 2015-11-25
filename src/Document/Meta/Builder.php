@@ -1,16 +1,15 @@
 <?php
 
-namespace Json\Document\Links;
+namespace Json\Document\Meta;
 
 use Json\Document\IBuilder;
-use Json\Document\Links;
 use Json\Document\Meta;
 use Json\Exceptions\InvalidDocumentLevelWrite;
 use Json\IFactory;
 
 /**
  * Class Builder
- * @package Json\Document\Links
+ * @package Json\Document\Meta
  */
 class Builder implements IBuilder
 {
@@ -21,18 +20,18 @@ class Builder implements IBuilder
     private $factory;
 
     /**
-     * @var \Json\Document\Data\Builder
+     * @var \Json\Document\Data\Builder|\Json\Document\Links\Builder|null
      */
     private $builder;
 
     /**
-     * @var Links[]
+     * @var array
      */
-    private $links;
+    private $meta = [];
 
     /**
      * @param IFactory $factory
-     * @param IBuilder|null $builder
+     * @param \Json\Document\Data\Builder|\Json\Document\Links\Builder|null|IBuilder|null $builder
      */
     public function __construct(IFactory $factory, IBuilder $builder = null)
     {
@@ -42,27 +41,26 @@ class Builder implements IBuilder
 
     /**
      * @param string $name
-     * @param string|null $href
-     * @param Meta\Collection $metaCollection
+     * @param string|array $value
      */
-    public function addLinks($name, $href = null, Meta\Collection $metaCollection = null)
+    public function addMeta($name, $value)
     {
-        $this->links[$name] = $this->factory->createLinks($name, $href, $metaCollection);
+        $this->meta[$name] = new Meta($name, $value);
     }
 
     /**
      * Adds the built object to the parent if there is any, and return the parent
-     * @return IBuilder
      * @throws InvalidDocumentLevelWrite
+     * @return IBuilder
      */
     public function addToParent()
     {
-        if (null === $this->builder)
+        if (null === $this->builder) {
             throw new InvalidDocumentLevelWrite;
-        $this->builder->addLinksCollection(
-            $this->factory->createLinksCollection($this->links)
-        );
+        }
 
-        return $this->builder;
+        $this->builder->addMetaCollection(
+            $this->factory->createMetaCollection($this->meta)
+        );
     }
 }
