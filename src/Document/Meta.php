@@ -44,11 +44,15 @@ class Meta implements IRecursively
      * @param string|array $value
      * @throws InvalidMetaException
      */
-    public function __construct($name, array $value)
+    public function __construct($name, $value)
     {
-        $keysFilter = array_filter($value, function ($key) {
-            return is_int($key);
-        }, ARRAY_FILTER_USE_KEY);
+        $keysFilter = null;
+
+        if (is_array($value)) {
+            $keysFilter = array_filter($value, function ($key) {
+                return is_int($key);
+            }, ARRAY_FILTER_USE_KEY);
+        }
 
         if (
             empty($value) || empty($name) || !is_string($name) || 0 < count($keysFilter)
@@ -75,6 +79,6 @@ class Meta implements IRecursively
      */
     public function getAsArray()
     {
-        return [$this->getName() => $this->getValue()];
+        return $this->getValue();
     }
 }

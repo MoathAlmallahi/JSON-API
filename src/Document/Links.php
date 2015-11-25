@@ -90,18 +90,16 @@ class Links implements IRecursively
     public function getAsArray()
     {
         if (null === $this->getMeta()) {
-            return [
-                $this->getName() => $this->getHref()
-            ];
+            return $this->getHref();
         } elseif (null === $this->getHref()) {
             return [
-                $this->getName() => [
+                [
                     static::FIELD_META => $this->getMeta()->getAsArray()
                 ]
             ];
         } else {
             return [
-                $this->getName() => [
+                [
                     static::FIELD_HREF => $this->getHref(),
                     static::FIELD_META => $this->getMeta()->getAsArray()
                 ]
