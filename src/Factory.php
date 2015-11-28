@@ -2,13 +2,13 @@
 
 namespace Json;
 
+use Json\Document\Error;
 use Json\Exceptions\InvalidLinkException;
 use Json\Document\Links;
 use Json\Document\Meta;
 use Json\Document\Data;
 use Json\Document\Relationships;
 use Json\Document\Error\Source;
-use Json\Utils\Helper;
 
 /**
  * Class Factory
@@ -173,5 +173,29 @@ class Factory implements IFactory
             $linksCollection,
             $includedCollection
         );
+    }
+
+    /**
+     * @param null|int $id
+     * @param null|int $status
+     * @param null|int $code
+     * @param null|string $title
+     * @param null|string $detail
+     * @param Source|null $source
+     * @param Links\Collection|null $links
+     * @param Meta\Collection|null $meta
+     * @return Error
+     */
+    public function createError(
+        $id = null,
+        $status = null,
+        $code = null,
+        $title = null,
+        $detail = null,
+        Source $source = null,
+        Document\Links\Collection $links = null,
+        Document\Meta\Collection $meta = null
+    ) {
+        return new Error($id, $status, $code, $title, $detail, $source, $links, $meta);
     }
 }

@@ -73,7 +73,7 @@ interface IFactory
 
     /**
      * @param array $errors
-     * @return Error/Collection
+     * @return Document\Error\Collection
      */
     public function createErrorsCollection(array $errors);
 
@@ -116,5 +116,27 @@ interface IFactory
         Document\Meta\Collection $metaCollection = null,
         Document\Links\Collection $linksCollection = null,
         Document\Included\Collection $includedCollection = null
+    );
+
+    /**
+     * @param null|int $id
+     * @param null|int $status
+     * @param null|int $code
+     * @param null|string $title
+     * @param null|string $detail
+     * @param Source|null $source
+     * @param Links\Collection|null $links
+     * @param Meta\Collection|null $meta
+     * @return Error
+     */
+    public function createError(
+        $id = null,
+        $status = null,
+        $code = null,
+        $title = null,
+        $detail = null,
+        Source $source = null,
+        Document\Links\Collection $links = null,
+        Document\Meta\Collection $meta = null
     );
 }

@@ -2,6 +2,7 @@
 
 namespace Json\Document\Error;
 
+use Json\Document\Error;
 use Json\Document\IBuilder;
 use Json\Document;
 use Json\Exceptions\InvalidDocumentLevelWrite;
@@ -25,7 +26,7 @@ class Builder implements IBuilder
     private $builder;
 
     /**
-     * @var array
+     * @var Error[]
      */
     private $errors;
 
@@ -40,12 +41,38 @@ class Builder implements IBuilder
     }
 
     /**
+     * @param null|int $id
+     * @param null|int $status
+     * @param null|int $code
+     * @param null|string $title
+     * @param null|string $detail
+     * @param Source|null $source
+     * @param Document\Links\Collection|null $links
+     * @param Document\Meta\Collection|null $meta
+     * @return Error
+     */
+    public function addError(
+        $id = null,
+        $status = null,
+        $code = null,
+        $title = null,
+        $detail = null,
+        Source $source = null,
+        Document\Links\Collection $links = null,
+        Document\Meta\Collection $meta = null
+    ) {
+        $this->errors[] = $this->factory->createError($id, $status, $code, $title, $detail, $source, $links, $meta);
+    }
+
+    /**
      * Adds the built object to the parent if there is any, and return the parent
      * @throws InvalidDocumentLevelWrite
      * @return IBuilder
      */
     public function addToParent()
     {
-        $this->builder->addErrorsCollection();
+        $this->builder->addErrorsCollection(
+            $this->factory->createErrorsCollection($this->errors)
+        );
     }
 }

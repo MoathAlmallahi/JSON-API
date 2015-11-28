@@ -23,7 +23,7 @@ class Builder implements IBuilder
     private $factory;
 
     /**
-     * @var \JSon\Document\Data\Builder|IBuilder|null
+     * @var \Json\Document\Data\Builder|IBuilder|null
      */
     private $builder;
 
@@ -66,7 +66,7 @@ class Builder implements IBuilder
      */
     public function addToParent()
     {
-        $this->builder->addRelationships(
+        $this->builder->addRelationshipsCollection(
             $this->factory->createRelationshipsCollection(
                 $this->relationships
             )

@@ -3,10 +3,10 @@
 namespace Json\Exceptions;
 
 /**
- * Class InvalidErrorSourceException
+ * Class InvalidErrorException
  * @package Json\Exceptions
  */
-class InvalidErrorSourceException extends \Exception
+class InvalidErrorException extends \Exception
 {
 
     /**
@@ -15,7 +15,7 @@ class InvalidErrorSourceException extends \Exception
      * @param \Exception|null $previous
      */
     public function __construct(
-        $message = 'Invalid error source',
+        $message = 'Error object should contain at least one parameter set',
         $code = 0,
         \Exception $previous = null
     ) {

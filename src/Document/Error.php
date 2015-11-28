@@ -2,6 +2,7 @@
 
 namespace Json\Document;
 
+use Json\Exceptions\InvalidErrorException;
 use Json\IRecursively;
 use Json\Document\Error\Source;
 use Json\Document\Links\Collection as LinksCollection;
@@ -73,17 +74,27 @@ class Error implements IRecursively
      * @param null|Source $source an Document containing references to the source of the error, optionally including any of the following members
      * @param null|LinksCollection $links A links Document
      * @param null|MetaCollections $meta A meta Document containing non-standard meta-information about the error
+     * @throws InvalidErrorException
      */
     public function __construct(
-        $id,
-        $status,
-        $code,
-        $title,
-        $detail,
+        $id = null,
+        $status = null,
+        $code = null,
+        $title = null,
+        $detail = null,
         Source $source = null,
         LinksCollection $links = null,
         MetaCollections $meta = null
     ) {
+        if (
+            null === $id && null === $status &&
+            null === $code && null === $title &&
+            null === $detail && null === $source &&
+            null === $links && null === $meta
+        ) {
+            throw new InvalidErrorException;
+        }
+
         $this->id = $id;
         $this->links = $links;
         $this->status = $status;
