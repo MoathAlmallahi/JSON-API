@@ -23,6 +23,33 @@ class Meta implements IRecursively
     private $value;
 
     /**
+     * Meta constructor.
+     * @param string $name
+     * @param string|array $value
+     * @throws InvalidMetaException
+     */
+    public function __construct($name, $value)
+    {
+        $keysFilter = null;
+
+//        if (is_array($value)) {
+//            $keysFilter = array_filter($value, function ($key) {
+//                return is_int($key);
+//            }, ARRAY_FILTER_USE_KEY);
+//        }
+
+        if (
+            empty($value) || empty($name) || !is_string($name) || 0 < count($keysFilter) ||
+            (is_object($value) && empty((array)$value))
+        ) {
+            throw new InvalidMetaException;
+        }
+
+        $this->name = $name;
+        $this->value = $value;
+    }
+
+    /**
      * @return string
      */
     public function getName()
@@ -36,32 +63,6 @@ class Meta implements IRecursively
     public function getValue()
     {
         return $this->value;
-    }
-
-    /**
-     * Meta constructor.
-     * @param string $name
-     * @param string|array $value
-     * @throws InvalidMetaException
-     */
-    public function __construct($name, $value)
-    {
-        $keysFilter = null;
-
-        if (is_array($value)) {
-            $keysFilter = array_filter($value, function ($key) {
-                return is_int($key);
-            }, ARRAY_FILTER_USE_KEY);
-        }
-
-        if (
-            empty($value) || empty($name) || !is_string($name) || 0 < count($keysFilter)
-        ) {
-            throw new InvalidMetaException;
-        }
-
-        $this->name = $name;
-        $this->value = $value;
     }
 
     /**
@@ -79,6 +80,6 @@ class Meta implements IRecursively
      */
     public function getAsArray()
     {
-        return $this->getValue();
+        return [$this->getName() => is_object($this->getValue()) ? (array)$this->getValue() : $this->getValue()];
     }
 }

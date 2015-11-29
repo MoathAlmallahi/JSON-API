@@ -73,8 +73,7 @@ class Data implements ISkeleton, IRecursively
     ) {
         if (
             (null === $type && null === $id) ||
-            (null !== $type && !is_string($type)) ||
-            (null === $relationships && null === $links && null === $meta)
+            (null !== $type && !is_string($type))
         ) {
             throw new InvalidJsonApiDataException;
         }
@@ -161,6 +160,6 @@ class Data implements ISkeleton, IRecursively
                 $this->getMeta()->getAsArray() : null
         ];
 
-        return array_filter($data);
+        return [array_filter($data)];
     }
 }

@@ -42,7 +42,7 @@ class MetaTest extends AbstractedTestCase
         $meta = new Meta($name, $value);
 
         $this->assertEquals($name, $meta->getName());
-        $this->assertEquals($arrayValue, $meta->getValue());
+        $this->assertEquals($value, $meta->getValue());
         $this->assertEquals($arrayValue, $meta->getAsArray()[$name]);
         $this->assertArrayHasKey($name, $meta->getAsArray());
 

@@ -17,7 +17,7 @@ class CollectionTest extends AbstractedTestCase
     public function testCreateSuccessfulCollection()
     {
         $link1 = $this->getJsonFactory()->createLinks('link1', 'http://www.github.com');
-        $link2 = $this->getJsonFactory()->createLinks('link1', 'http://www.github.com');
+        $link2 = $this->getJsonFactory()->createLinks('link2', 'http://www.github.com');
 
         $linksCollection = new Links\Collection([$link1, $link2]);
 

@@ -195,6 +195,6 @@ class Error implements IRecursively
             static::FIELD_META => $this->getMeta()->getAsArray()
         ];
 
-        return array_filter($error);
+        return [array_filter($error)];
     }
 }

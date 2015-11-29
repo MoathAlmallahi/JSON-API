@@ -14,26 +14,16 @@ class RelationshipsTest extends AbstractedTestCase
     /**
      * s
      */
-    public function testSuccessfulRelationshipsWithoutData()
+    public function testRelationships()
     {
-        $relationships = new Relationships(
-            $this->createLinksCollectionWithMeta(),
-            null,
-            $this->createMetaCollection()
-        );
 
-        echo $relationships->getAsJson();
     }
 
     /**
-     * s
+     * @return array
      */
-    public function testSuccessfulRelationshipsWithoutMeta()
+    public function dataProviderTestRelationships()
     {
-        $relationships = new Relationships(
-            null,
-            $this->createDataCollection(),
-            $this->createMetaCollection()
-        );
+        return [];
     }
 }

@@ -61,31 +61,6 @@ class Relationships implements IRecursively
     }
 
     /**
-     * Returns json encoded value or null
-     * @return string|null
-     */
-    public function getAsJson()
-    {
-        return json_encode($this->getAsArray());
-    }
-
-    /**
-     * Returns the json as array
-     * @return array
-     */
-    public function getAsArray()
-    {
-        $relationshipsArray[Data::FIELD_LINKS] = null !== $this->getLinksCollection() ?
-            $this->getLinksCollection()->getAsArray() : null;
-        $relationshipsArray[Data::FIELD_DATA] = null !== $this->getDataCollection() ?
-            $this->getDataCollection()->getAsArray() : null;
-        $relationshipsArray[Data::FIELD_META] = null !== $this->getMetaCollection() ?
-            $this->getMetaCollection()->getAsArray() : null;
-
-        return array_filter($relationshipsArray);
-    }
-
-    /**
      * @return LinksCollection|null
      */
     public function getLinksCollection()
@@ -115,5 +90,30 @@ class Relationships implements IRecursively
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Returns json encoded value or null
+     * @return string|null
+     */
+    public function getAsJson()
+    {
+        return json_encode($this->getAsArray());
+    }
+
+    /**
+     * Returns the json as array
+     * @return array
+     */
+    public function getAsArray()
+    {
+        $relationshipsArray[Data::FIELD_LINKS] = null !== $this->getLinksCollection() ?
+            $this->getLinksCollection()->getAsArray() : null;
+        $relationshipsArray[Data::FIELD_DATA] = null !== $this->getDataCollection() ?
+            $this->getDataCollection()->getAsArray() : null;
+        $relationshipsArray[Data::FIELD_META] = null !== $this->getMetaCollection() ?
+            $this->getMetaCollection()->getAsArray() : null;
+
+        return [$this->getName() => array_filter($relationshipsArray)];
     }
 }

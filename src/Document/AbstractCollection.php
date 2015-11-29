@@ -10,7 +10,7 @@ use Json\IRecursively;
  * Class AbstractCollection
  * @package Json\Document
  */
-abstract class AbstractCollection implements \Iterator, \Countable, IRecursively
+abstract class AbstractCollection implements \Iterator, \Countable, \ArrayAccess, IRecursively
 {
 
     const COLLECTION_NAME = 'collectionName';
@@ -119,10 +119,79 @@ abstract class AbstractCollection implements \Iterator, \Countable, IRecursively
      */
     public function getAsArray()
     {
-        return array_map(function ($item) {
+        $collectionAsArray = [];
+        array_map(function ($item) use (&$collectionAsArray) {
             /** @var Meta|Data|Links|Relationships $item */
-            return $item->getAsArray();
+            $collectionAsArray = array_merge($item->getAsArray(), $collectionAsArray);
         }, $this->items);
+
+        return $collectionAsArray;
+    }
+
+    /**
+     * Whether a offset exists
+     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+     * @param mixed $offset <p>
+     * An offset to check for.
+     * </p>
+     * @return boolean true on success or false on failure.
+     * </p>
+     * <p>
+     * The return value will be casted to boolean if non-boolean was returned.
+     * @since 5.0.0
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->items[$offset]);
+    }
+
+    /**
+     * Offset to retrieve
+     * @link http://php.net/manual/en/arrayaccess.offsetget.php
+     * @param mixed $offset <p>
+     * The offset to retrieve.
+     * </p>
+     * @return mixed Can return all value types.
+     * @since 5.0.0
+     */
+    public function offsetGet($offset)
+    {
+        return isset($this->items[$offset]) ? $this->items[$offset] : null;
+    }
+
+    /**
+     * Offset to set
+     * @link http://php.net/manual/en/arrayaccess.offsetset.php
+     * @param mixed $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     * @param mixed $value <p>
+     * The value to set.
+     * </p>
+     * @return void
+     * @since 5.0.0
+     */
+    public function offsetSet($offset, $value)
+    {
+        if (is_null($offset)) {
+            $this->items[] = $value;
+        } else {
+            $this->items[$offset] = $value;
+        }
+    }
+
+    /**
+     * Offset to unset
+     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+     * @param mixed $offset <p>
+     * The offset to unset.
+     * </p>
+     * @return void
+     * @since 5.0.0
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->items[$offset]);
     }
 
     /**
