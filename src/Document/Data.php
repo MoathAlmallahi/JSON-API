@@ -2,7 +2,7 @@
 
 namespace Json\Document;
 
-use Json\Exceptions\InvalidJsonApiDataException;
+use Json\Exceptions\InvalidDataException;
 use Json\IRecursively;
 use Json\ISkeleton;
 use Json\Document\Links;
@@ -61,7 +61,7 @@ class Data implements ISkeleton, IRecursively
      * @param Relationships\Collection|null $relationships
      * @param Links\Collection|null $links
      * @param Meta\Collection|null $meta
-     * @throws InvalidJsonApiDataException
+     * @throws InvalidDataException
      */
     public function __construct(
         $type = null,
@@ -75,7 +75,7 @@ class Data implements ISkeleton, IRecursively
             (null === $type && null === $id) ||
             (null !== $type && !is_string($type))
         ) {
-            throw new InvalidJsonApiDataException;
+            throw new InvalidDataException;
         }
         $this->type = $type;
         $this->id = $id;
@@ -112,7 +112,7 @@ class Data implements ISkeleton, IRecursively
     /**
      * @return Relationships\Collection|null
      */
-    public function getRelationships()
+    public function getRelationshipsCollection()
     {
         return $this->relationships;
     }
@@ -120,7 +120,7 @@ class Data implements ISkeleton, IRecursively
     /**
      * @return Links\Collection|null
      */
-    public function getLinks()
+    public function getLinksCollection()
     {
         return $this->links;
     }
@@ -128,7 +128,7 @@ class Data implements ISkeleton, IRecursively
     /**
      * @return Meta\Collection|null
      */
-    public function getMeta()
+    public function getMetaCollection()
     {
         return $this->meta;
     }
@@ -152,14 +152,13 @@ class Data implements ISkeleton, IRecursively
             static::FIELD_TYPE => $this->getType(),
             static::FIELD_ID => $this->getId(),
             static::FIELD_ATTRIBUTES => $this->getAttributes(),
-            static::FIELD_RELATIONSHIPS => null !== $this->getRelationships() ?
-                $this->getRelationships()->getAsArray() : null,
-            static::FIELD_LINKS => null !== $this->getLinks() ?
-                $this->getLinks()->getAsArray() : null,
-            static::FIELD_META => null !== $this->getMeta() ?
-                $this->getMeta()->getAsArray() : null
+            static::FIELD_RELATIONSHIPS => null !== $this->getRelationshipsCollection() ?
+                $this->getRelationshipsCollection()->getAsArray() : null,
+            static::FIELD_LINKS => null !== $this->getLinksCollection() ?
+                $this->getLinksCollection()->getAsArray() : null,
+            static::FIELD_META => null !== $this->getMetaCollection() ?
+                $this->getMetaCollection()->getAsArray() : null
         ];
-
         return [array_filter($data)];
     }
 }

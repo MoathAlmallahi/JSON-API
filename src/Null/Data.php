@@ -42,7 +42,7 @@ class Data implements ISkeleton, IRecursively
     /**
      * @return RelationshipsCollection|null
      */
-    public function getRelationships()
+    public function getRelationshipsCollection()
     {
         return null;
     }
@@ -50,7 +50,7 @@ class Data implements ISkeleton, IRecursively
     /**
      * @return LinksCollection|null
      */
-    public function getLinks()
+    public function getLinksCollection()
     {
         return null;
     }
@@ -58,7 +58,7 @@ class Data implements ISkeleton, IRecursively
     /**
      * @return MetaCollection|null
      */
-    public function getMeta()
+    public function getMetaCollection()
     {
         return null;
     }

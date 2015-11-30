@@ -13,61 +13,46 @@ use JsonTest\AbstractedTestCase;
 class MetaTest extends AbstractedTestCase
 {
     /**
-     * Test the creation of Meta successfully
+     * Test creating a Meta w/o meta
+     * @param array $attributes
+     * @param $expected
+     * @param $exception
+     * @dataProvider dataProviderTestMeta
      */
-    public function testSuccessfulMeta()
+    public function testMeta(array $attributes, $expected = null, $exception = null)
     {
-        $name = 'Foo';
-        $value = 'Bar';
-        $meta = new Meta($name, $value);
+        if (null !== $exception) {
+            $this->setExpectedException($exception);
+        }
 
-        $this->assertEquals($name, $meta->getName());
-        $this->assertEquals($value, $meta->getValue());
-        $this->assertEquals($value, $meta->getAsArray()[$name]);
-        $this->assertArrayHasKey($name, $meta->getAsArray());
+        $links = new Meta($attributes['name'], $attributes['value']);
 
-        return $meta;
+        $this->assertEquals($expected, $links->getAsArray());
     }
 
     /**
-     * Test the creation of Meta successfully with an Document value
+     * @return array
      */
-    public function testSuccessfulMetaWithDocumentValue()
+    public function dataProviderTestMeta()
     {
-        $name = 'Foo';
-        $value = new \StdClass;
-        $value->Foo = 'Bar';
-        $value->Bar = 'Foo';
-        $arrayValue = (array)$value;
-        $meta = new Meta($name, $value);
-
-        $this->assertEquals($name, $meta->getName());
-        $this->assertEquals($value, $meta->getValue());
-        $this->assertEquals($arrayValue, $meta->getAsArray()[$name]);
-        $this->assertArrayHasKey($name, $meta->getAsArray());
-
-        return $meta;
-    }
-
-    /**
-     * Test the creation of Meta successfully with an Document value
-     */
-    public function testInvalidMetaWithEmptyDocument()
-    {
-        $this->setExpectedException(InvalidMetaException::class);
-        $name = 'Foo';
-        $value = new \StdClass;
-        $meta = new Meta($name, $value);
-    }
-
-    /**
-     * Test the creation of Meta successfully
-     */
-    public function testInvalidMetaValue()
-    {
-        $this->setExpectedException(InvalidMetaException::class);
-        $name = 'something';
-        $value = null;
-        $meta = new Meta($name, $value);
+        return [
+            'successful' => [
+                'attributes' => [
+                    'name' => 'Foo',
+                    'value' => 'Bar'
+                ],
+                'expected' => [
+                    'Foo' => 'Bar'
+                ]
+            ],
+            'failure' => [
+                'attributes' => [
+                    'name' => 'Foo',
+                    'value' => null
+                ],
+                'expected' => null,
+                'exception' => InvalidMetaException::class
+            ]
+        ];
     }
 }

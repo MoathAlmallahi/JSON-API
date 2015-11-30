@@ -30,17 +30,8 @@ class Meta implements IRecursively
      */
     public function __construct($name, $value)
     {
-        $keysFilter = null;
-
-//        if (is_array($value)) {
-//            $keysFilter = array_filter($value, function ($key) {
-//                return is_int($key);
-//            }, ARRAY_FILTER_USE_KEY);
-//        }
-
         if (
-            empty($value) || empty($name) || !is_string($name) || 0 < count($keysFilter) ||
-            (is_object($value) && empty((array)$value))
+            empty($value) || empty($name) || !is_string($name) || (is_object($value) && empty((array)$value))
         ) {
             throw new InvalidMetaException;
         }

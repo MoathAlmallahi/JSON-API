@@ -6,7 +6,7 @@ namespace Json\Exceptions;
  * Class InvalidJsonApiDocument
  * @package Json\Exceptions
  */
-class InvalidJsonApiDataException extends \Exception
+class InvalidDataException extends \Exception
 {
 
     /**

@@ -31,15 +31,15 @@ interface ISkeleton
     /**
      * @return RelationshipsCollection|null
      */
-    public function getRelationships();
+    public function getRelationshipsCollection();
 
     /**
      * @return LinksCollection|null
      */
-    public function getLinks();
+    public function getLinksCollection();
 
     /**
      * @return MetaCollection|null
      */
-    public function getMeta();
+    public function getMetaCollection();
 }

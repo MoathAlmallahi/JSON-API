@@ -2,6 +2,7 @@
 
 namespace JsonTest\Document;
 
+use Json\Document\Meta;
 use Json\Exceptions\InvalidLinkException;
 use Json\Document\Links;
 use JsonTest\AbstractedTestCase;
@@ -12,80 +13,74 @@ use JsonTest\AbstractedTestCase;
  */
 class LinksTest extends AbstractedTestCase
 {
-
     /**
      * Test creating a Links w/o meta
+     * @param array $attributes
+     * @param $expected
+     * @param $exception
+     * @dataProvider dataProviderTestLinks
      */
-    public function testSuccessfulWithoutMeta()
+    public function testLinks(array $attributes, $expected = null, $exception = null)
     {
-        $name = 'self';
-        $href = 'http://www.github.com';
-        $links = new Links($name, $href);
+        if (null !== $exception) {
+            $this->setExpectedException($exception);
+        }
 
-        $jsonArray = $links->getAsArray();
+        $links = new Links($attributes['name'], $attributes[Links::FIELD_HREF], $attributes[Links::FIELD_META]);
 
-        $this->assertEquals($name, $links->getName());
-        $this->assertEquals($href, $links->getHref());
-        $this->assertArrayHasKey($name, $jsonArray);
-        $this->assertArrayHasKey($name, $jsonArray);
-        $this->assertArrayNotHasKey(Links::FIELD_META, $jsonArray);
+        $this->assertEquals($expected, $links->getAsArray());
     }
 
     /**
-     * Test creating a Links w/ meta
+     * @return array
      */
-    public function testSuccessfulWithMeta()
+    public function dataProviderTestLinks()
     {
-        $name = 'self';
-        $href = 'http://www.github.com';
-
-        $meta1 = $this->getJsonFactory()->createMeta('meta1', 'value of meta1');
-        $meta2 = $this->getJsonFactory()->createMeta('meta2', 'value of meta2');
-        $metaCollection = $this->getJsonFactory()->createMetaCollection([$meta1, $meta2]);
-
-        $links = new Links($name, $href, $metaCollection);
-
-        $this->assertEquals($name, $links->getName());
-        $this->assertEquals($href, $links->getHref());
-        $this->assertEquals($metaCollection, $links->getMeta());
-        $this->assertArrayHasKey($name, $links->getAsArray());
-        $this->assertArrayHasKey(Links::FIELD_HREF, $links->getAsArray()[$name]);
-        $this->assertArrayHasKey(Links::FIELD_META, $links->getAsArray()[$name]);
-    }
-
-    /**
-     * Test creating a Links w/ meta only
-     */
-    public function testSuccessfulWithMetaOnly()
-    {
-        $name = 'self';
-        $href = null;
-
-        $meta1 = $this->getJsonFactory()->createMeta('meta1', 'value of meta1');
-        $meta2 = $this->getJsonFactory()->createMeta('meta2', 'value of meta2');
-        $metaCollection = $this->getJsonFactory()->createMetaCollection([$meta1, $meta2]);
-
-        $links = new Links($name, $href, $metaCollection);
-
-        $this->assertEquals($name, $links->getName());
-        $this->assertEquals($href, $links->getHref());
-        $this->assertEquals($metaCollection, $links->getMeta());
-        $this->assertArrayHasKey($name, $links->getAsArray());
-        $this->assertArrayNotHasKey(Links::FIELD_HREF, $links->getAsArray()[$name]);
-        $this->assertArrayHasKey(Links::FIELD_META, $links->getAsArray()[$name]);
-
-        return $links;
-    }
-
-    /**
-     * Test creating an invalid Links
-     */
-    public function testInvalidLinksException()
-    {
-        $this->setExpectedException(InvalidLinkException::class);
-        $name = 'self';
-        $href = null;
-        $meta = null;
-        $links = new Links($name, $href, $meta);
+        return [
+            'successful - full links' => [
+                'attributes' => [
+                    'name' => 'self',
+                    Links::FIELD_HREF => 'http://www.github.com',
+                    Links::FIELD_META => $this->createMetaCollection()
+                ],
+                'expected' => [
+                    'self' => [
+                        Links::FIELD_HREF => 'http://www.github.com',
+                        Links::FIELD_META => $this->createMetaCollection()->getAsArray()
+                    ]
+                ]
+            ],
+            'successful - no href' => [
+                'attributes' => [
+                    'name' => 'self',
+                    Links::FIELD_HREF => null,
+                    Links::FIELD_META => $this->createMetaCollection()
+                ],
+                'expected' => [
+                    'self' => [
+                        Links::FIELD_META => $this->createMetaCollection()->getAsArray()
+                    ]
+                ]
+            ],
+            'successful - no meta' => [
+                'attributes' => [
+                    'name' => 'self',
+                    Links::FIELD_HREF => 'http://www.github.com',
+                    Links::FIELD_META => null
+                ],
+                'expected' => [
+                    'self' => 'http://www.github.com',
+                ]
+            ],
+            'invalid - exception' => [
+                'attributes' => [
+                    'name' => 'self',
+                    Links::FIELD_HREF => null,
+                    Links::FIELD_META => null
+                ],
+                'expected' => [],
+                'exception' => InvalidLinkException::class
+            ]
+        ];
     }
 }
