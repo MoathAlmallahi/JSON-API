@@ -156,7 +156,7 @@ abstract class AbstractCollection implements \Iterator, \Countable, \ArrayAccess
      */
     public function offsetGet($offset)
     {
-        return isset($this->items[$offset]) ? $this->items[$offset] : null;
+        return isset($this->items[$offset]) ? clone $this->items[$offset] : null;
     }
 
     /**

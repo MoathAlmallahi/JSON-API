@@ -3,6 +3,8 @@
 namespace JsonTest\Document\Links;
 
 use Json\Document\Links;
+use Json\Document\Meta;
+use Json\Exceptions\InvalidCollectionItemTypeException;
 use JsonTest\AbstractedTestCase;
 
 /**
@@ -12,18 +14,46 @@ use JsonTest\AbstractedTestCase;
 class CollectionTest extends AbstractedTestCase
 {
     /**
-     * test creating a links collection successfully
+     * @param array $collectionItems
+     * @param null|string $exception
+     * @dataProvider dataProviderTestLinksCollection
      */
-    public function testCreateSuccessfulCollection()
+    public function testLinksCollection(array $collectionItems, $exception = null)
     {
-        $link1 = $this->getJsonFactory()->createLinks('link1', 'http://www.github.com');
-        $link2 = $this->getJsonFactory()->createLinks('link2', 'http://www.github.com');
+        if (null !== $exception) {
+            $this->setExpectedException($exception);
+        }
+        $linksCollection = new Links\Collection($collectionItems);
 
-        $linksCollection = new Links\Collection([$link1, $link2]);
+        $this->assertEquals(count($collectionItems), $linksCollection->count());
 
-        $this->assertEquals(2, $linksCollection->count());
-        $this->assertEquals(2, count($linksCollection));
+        $count = 0;
+        foreach ($linksCollection as $name => $links) {
+            $this->assertEquals($collectionItems[$count], $links);
+            $this->assertEquals($collectionItems[$count], $linksCollection[$name]);
+            $count++;
+        }
+    }
 
-        return $linksCollection;
+    /**
+     * @return array
+     */
+    public function dataProviderTestLinksCollection()
+    {
+        return [
+            'successful collection' => [
+                'collectionItems' => [
+                    new Links('self', 'http://www.github.com'),
+                    new Links('related', 'http://www.github.com'),
+                ]
+            ],
+            'failure with different type' => [
+                'collectionItems' => [
+                    new Links('self', 'http://www.github.com'),
+                    new Meta('key', 'value')
+                ],
+                'exception' => InvalidCollectionItemTypeException::class
+            ]
+        ];
     }
 }

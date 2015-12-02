@@ -3,6 +3,8 @@
 namespace JsonTest\Document\Data;
 
 use Json\Document\Data;
+use Json\Document\Meta;
+use Json\Exceptions\InvalidCollectionItemTypeException;
 use JsonTest\AbstractedTestCase;
 
 /**
@@ -11,14 +13,46 @@ use JsonTest\AbstractedTestCase;
  */
 class CollectionTest extends AbstractedTestCase
 {
-    public function testDataCollection()
+    /**
+     * @param array $collectionItems
+     * @param null|string $exception
+     * @dataProvider dataProviderTestDataCollection
+     */
+    public function testDataCollection(array $collectionItems, $exception = null)
     {
-        $data1 = new Data('article', 1);
-        $data2 = new Data('article', 2);
+        if (null !== $exception) {
+            $this->setExpectedException($exception);
+        }
+        $dataCollection = new Data\Collection($collectionItems);
 
-        $dataCollection = new Data\Collection([$data1, $data2]);
+        $this->assertEquals(count($collectionItems), $dataCollection->count());
 
-        $this->assertEquals(2, $dataCollection->count());
-        $this->assertEquals($data1->getAsArray(), $dataCollection[0]->getAsArray());
+        $count = 0;
+        foreach ($dataCollection as $data) {
+            $this->assertEquals($collectionItems[$count], $data);
+            $count++;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestDataCollection()
+    {
+        return [
+            'successful collection' => [
+                'collectionItems' => [
+                    new Data('article', 1),
+                    new Data('article', 2)
+                ]
+            ],
+            'failure with different type' => [
+                'collectionItems' => [
+                    new Data('article', 1),
+                    new Meta('key', 'value')
+                ],
+                'exception' => InvalidCollectionItemTypeException::class
+            ]
+        ];
     }
 }
