@@ -168,16 +168,12 @@ abstract class AbstractCollection implements \Iterator, \Countable, \ArrayAccess
      * @param mixed $value <p>
      * The value to set.
      * </p>
-     * @return void
+     * @throws \Exception
      * @since 5.0.0
      */
     public function offsetSet($offset, $value)
     {
-        if (is_null($offset)) {
-            $this->items[] = $value;
-        } else {
-            $this->items[$offset] = $value;
-        }
+        throw new \Exception('Cannot assign an item');
     }
 
     /**
@@ -186,12 +182,12 @@ abstract class AbstractCollection implements \Iterator, \Countable, \ArrayAccess
      * @param mixed $offset <p>
      * The offset to unset.
      * </p>
-     * @return void
+     * @throws \Exception
      * @since 5.0.0
      */
     public function offsetUnset($offset)
     {
-        unset($this->items[$offset]);
+        throw new \Exception('Cannot unset an item');
     }
 
     /**

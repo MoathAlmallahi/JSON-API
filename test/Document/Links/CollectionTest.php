@@ -27,10 +27,17 @@ class CollectionTest extends AbstractedTestCase
 
         $this->assertEquals(count($collectionItems), $linksCollection->count());
 
+        $this->setExpectedException(\Exception::class, 'Cannot assign an item');
+        $linksCollection['test'] = null;
+
         $count = 0;
         foreach ($linksCollection as $name => $links) {
             $this->assertEquals($collectionItems[$count], $links);
             $this->assertEquals($collectionItems[$count], $linksCollection[$name]);
+
+            $this->setExpectedException(\Exception::class, 'Cannot unset an item');
+            unset($linksCollection[$name]);
+
             $count++;
         }
     }

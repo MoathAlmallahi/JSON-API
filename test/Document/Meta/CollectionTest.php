@@ -31,6 +31,8 @@ class CollectionTest extends AbstractedTestCase
         foreach ($metaCollection as $name => $meta) {
             $this->assertEquals($collectionItems[$count], $meta);
             $this->assertEquals($collectionItems[$count], $metaCollection[$name]);
+
+            $this->assertEquals(true, isset($metaCollection[$name]));
             $count++;
         }
     }

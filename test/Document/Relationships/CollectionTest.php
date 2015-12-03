@@ -25,12 +25,21 @@ class CollectionTest extends AbstractedTestCase
         }
         $relationshipsCollection = new Relationships\Collection($collectionItems);
 
-        $this->assertEquals(count($collectionItems), $relationshipsCollection->count());
+        $this->assertEquals(count($collectionItems), count($relationshipsCollection));
+
+        $this->setExpectedException(\Exception::class, 'Cannot assign an item');
+        $relationshipsCollection['test'] = null;
 
         $count = 0;
         foreach ($relationshipsCollection as $name => $relationship) {
             $this->assertEquals($collectionItems[$count], $relationship);
             $this->assertEquals($collectionItems[$count], $relationshipsCollection[$name]);
+
+            $this->setExpectedException(\Exception::class, 'Cannot unset an item');
+            unset($relationshipsCollection[$name]);
+
+            $this->assertNotEquals(null, $relationshipsCollection[$name]);
+            $this->assertEquals(true, isset($relationshipsCollection[$name]));
             $count++;
         }
     }

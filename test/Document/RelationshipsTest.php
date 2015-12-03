@@ -30,6 +30,8 @@ class RelationshipsTest extends AbstractedTestCase
             $attributes[Relationships::FIELD_DATA],
             $attributes[Relationships::FIELD_META]
         );
+
+        $this->assertEquals($expected, $rs->getAsArray());
     }
 
     /**
