@@ -70,7 +70,7 @@ class Builder implements IBuilder
      */
     public function addErrorsCollection(Error\Collection $errorsCollection)
     {
-        $this->document[Document::FIELD_ERRORS][] = $errorsCollection;
+        $this->document[Document::FIELD_ERRORS] = $errorsCollection;
 
         return $this;
     }
@@ -141,8 +141,7 @@ class Builder implements IBuilder
         return $this->factory->createDocument(
             null !== $this->document[Document::FIELD_DATA] ?
                 $this->factory->createDataCollection($this->document[Document::FIELD_DATA]) : null,
-            null !== $this->document[Document::FIELD_ERRORS] ?
-                $this->factory->createErrorsCollection($this->document[Document::FIELD_ERRORS]) : null,
+            $this->document[Document::FIELD_ERRORS],
             $this->document[Document::FIELD_META],
             $this->document[Document::FIELD_LINKS],
             $this->document[Document::FIELD_INCLUDED]
