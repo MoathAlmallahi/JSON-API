@@ -2,7 +2,6 @@
 
 namespace Json\Null;
 
-use Json\ISkeleton;
 use Json\Document\Links\Collection as LinksCollection;
 use Json\Document\Meta\Collection as MetaCollection;
 use Json\Document\Relationships\Collection as RelationshipsCollection;
@@ -12,7 +11,7 @@ use Json\IRecursively;
  * Class Null
  * @package Json
  */
-class Data implements ISkeleton, IRecursively
+class Data implements IRecursively
 {
 
     /**

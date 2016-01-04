@@ -13,7 +13,6 @@ use Json\IFactory;
  */
 class Builder implements IBuilder
 {
-
     /**
      * @var IFactory
      */
@@ -30,6 +29,11 @@ class Builder implements IBuilder
     private $meta = [];
 
     /**
+     * @var array
+     */
+    private $structure;
+
+    /**
      * @param IFactory $factory
      * @param \Json\Document\Data\Builder|\Json\Document\Links\Builder|null|IBuilder|null $builder
      */
@@ -37,15 +41,43 @@ class Builder implements IBuilder
     {
         $this->factory = $factory;
         $this->builder = $builder;
+        $this->resetStructure();
     }
 
     /**
      * @param string $name
-     * @param string|array $value
+     * @return $this
      */
-    public function addMeta($name, $value)
+    public function setName($name)
     {
-        $this->meta[$name] = new Meta($name, $value);
+        $this->structure['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $value
+     * @return Builder
+     */
+    public function setValue($value)
+    {
+        $this->structure['value'] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return Builder
+     */
+    public function addMeta()
+    {
+        $this->meta[] = $this->factory->createMeta(
+            $this->structure['name'],
+            $this->structure['value']
+        );
+        $this->resetStructure();
+
+        return $this;
     }
 
     /**
@@ -59,8 +91,22 @@ class Builder implements IBuilder
             throw new InvalidDocumentLevelWrite;
         }
 
-        $this->builder->addMetaCollection(
+        $this->builder->setMetaCollection(
             $this->factory->createMetaCollection($this->meta)
         );
+        $this->resetStructure();
+
+        return $this->builder;
+    }
+
+    /**
+     * @return void
+     */
+    private function resetStructure()
+    {
+        $this->structure = [
+            'name' => null,
+            'value' => null
+        ];
     }
 }

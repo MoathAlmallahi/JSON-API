@@ -4,16 +4,14 @@ namespace Json\Document;
 
 use Json\Exceptions\InvalidDataException;
 use Json\IRecursively;
-use Json\Document\Links;
-use Json\Document\Meta;
-use Json\Document\Relationships;
 
 /**
- * Class Data
- * @package Json
+ * Class Included
+ * @package Json\Document
  */
-class Data implements IRecursively
+class Included implements IRecursively
 {
+
     const FIELD_TYPE = 'type';
     const FIELD_ID = 'id';
     const FIELD_ATTRIBUTES = 'attributes';

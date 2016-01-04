@@ -11,8 +11,8 @@ use Json\IRecursively;
  */
 class Links implements IRecursively
 {
-
-    const FIELD_META = 'metaCollection';
+    const FIELD_NAME = 'name';
+    const FIELD_META = 'meta';
     const FIELD_HREF = 'href';
 
     /**
@@ -29,6 +29,24 @@ class Links implements IRecursively
      * @var Meta\Collection|null
      */
     private $metaCollection;
+
+    /**
+     * Initialize and inject the link Document with the specified data
+     * @param string $name
+     * @param string $href a string containing the link's URL
+     * @param Meta\Collection|null $metaCollection a meta object containing non-standard meta-information about the link
+     * @throws InvalidLinkException
+     */
+    public function __construct($name, $href = null, Meta\Collection $metaCollection = null)
+    {
+        if ((!isset($href) && !isset($metaCollection)) || !is_string($name)) {
+            throw new InvalidLinkException;
+        }
+
+        $this->name = $name;
+        $this->href = $href;
+        $this->metaCollection = $metaCollection;
+    }
 
     /**
      * @return string
@@ -52,26 +70,6 @@ class Links implements IRecursively
     public function getMeta()
     {
         return $this->metaCollection;
-    }
-
-    /**
-     * Initialize and inject the link Document with the specified data
-     * @param string $name
-     * @param string $href
-     * @param Meta\Collection|null $metaCollection
-     * @throws InvalidLinkException
-     */
-    public function __construct($name, $href = null, Meta\Collection $metaCollection = null)
-    {
-        if (
-            (!isset($href) && !isset($metaCollection)) ||
-            !is_string($name)
-        ) {
-            throw new InvalidLinkException;
-        }
-        $this->name = $name;
-        $this->href = $href;
-        $this->metaCollection = $metaCollection;
     }
 
     /**
