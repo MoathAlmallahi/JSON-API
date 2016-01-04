@@ -63,6 +63,27 @@ class ErrorTest extends AbstractedTestCase
                         Error::FIELD_META => $this->createMetaCollection()->getAsArray()
                     ]
                 ]
+            ],
+            'successful - not all fields' => [
+                'attributes' => [
+                    Error::FIELD_ID => 123,
+                    Error::FIELD_STATUS => 1,
+                    Error::FIELD_CODE => 404,
+                    Error::FIELD_TITLE => 'the error title',
+                    Error::FIELD_DETAIL => 'the error details',
+                    Error::FIELD_SOURCE => null,
+                    Error::FIELD_LINKS => null,
+                    Error::FIELD_META => null
+                ],
+                'expected' => [
+                    [
+                        Error::FIELD_ID => 123,
+                        Error::FIELD_STATUS => 1,
+                        Error::FIELD_CODE => 404,
+                        Error::FIELD_TITLE => 'the error title',
+                        Error::FIELD_DETAIL => 'the error details',
+                    ]
+                ]
             ]
         ];
     }
