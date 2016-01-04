@@ -186,13 +186,16 @@ class Error implements IRecursively
     {
         $error = [
             static::FIELD_ID => $this->getId(),
-            static::FIELD_LINKS => $this->getLinks()->getAsArray(),
+            static::FIELD_LINKS => null !== $this->getLinks() ?
+                $this->getLinks()->getAsArray() : null,
             static::FIELD_STATUS => $this->getStatus(),
             static::FIELD_CODE => $this->getCode(),
             static::FIELD_TITLE => $this->getTitle(),
             static::FIELD_DETAIL => $this->getDetail(),
-            static::FIELD_SOURCE => $this->getSource()->getAsArray(),
-            static::FIELD_META => $this->getMeta()->getAsArray()
+            static::FIELD_SOURCE => null !== $this->getSource() ?
+                $this->getSource()->getAsArray() : null,
+            static::FIELD_META => null !== $this->getMeta() ?
+                $this->getMeta()->getAsArray() : null
         ];
 
         return [array_filter($error)];
