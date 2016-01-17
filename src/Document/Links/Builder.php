@@ -2,9 +2,7 @@
 
 namespace Json\Document\Links;
 
-use Json\Document\IBuilder;
-use Json\Document\Links;
-use Json\Document\Meta;
+use Json\Document;
 use Json\Exceptions\InvalidDocumentLevelWrite;
 use Json\IFactory;
 
@@ -12,57 +10,123 @@ use Json\IFactory;
  * Class Builder
  * @package Json\Document\Links
  */
-class Builder implements IBuilder
+class Builder implements Document\IBuilder
 {
-
     /**
      * @var IFactory
      */
     private $factory;
 
     /**
-     * @var \Json\Document\Data\Builder
+     * @var Document\Data\Builder|Document\Error\Builder|Document\Relationships\Builder
      */
     private $builder;
 
     /**
-     * @var Links[]
+     * @var Document\Links[]
      */
     private $links;
 
     /**
-     * @param IFactory $factory
-     * @param IBuilder|null $builder
+     * @var array
      */
-    public function __construct(IFactory $factory, IBuilder $builder = null)
+    private $structure;
+
+    /**
+     * @param IFactory $factory
+     * @param Document\IBuilder|null $builder
+     */
+    public function __construct(IFactory $factory, Document\IBuilder $builder = null)
     {
         $this->factory = $factory;
         $this->builder = $builder;
+        $this->resetStructure();
+    }
+
+    /**
+     * @return Builder
+     */
+    public function addLink()
+    {
+        $this->links[$this->structure[Document\Links::FIELD_NAME]] = $this->factory->createLinks(
+            $this->structure[Document\Links::FIELD_NAME],
+            $this->structure[Document\Links::FIELD_HREF],
+            $this->structure[Document\Links::FIELD_META]
+        );
+        $this->resetStructure();
+
+        return $this;
     }
 
     /**
      * @param string $name
-     * @param string|null $href
-     * @param Meta\Collection $metaCollection
+     * @return Builder
      */
-    public function addLinks($name, $href = null, Meta\Collection $metaCollection = null)
+    public function setName($name)
     {
-        $this->links[$name] = $this->factory->createLinks($name, $href, $metaCollection);
+        $this->structure[Document\Links::FIELD_NAME] = $name;
+
+        return $this;
+    }
+
+    /**
+     * @param $href
+     * @return Builder
+     */
+    public function setHref($href)
+    {
+        $this->structure[Document\Links::FIELD_HREF] = $href;
+
+        return $this;
+    }
+
+    /**
+     * @param Document\Meta\Collection $meta
+     * @return Builder
+     */
+    public function setMetaCollection(Document\Meta\Collection $meta)
+    {
+        $this->structure[Document\Links::FIELD_META] = $meta;
+
+        return $this;
+    }
+
+    /**
+     * @return Document\Meta\Builder
+     */
+    public function getMetaCollectionBuilder()
+    {
+        return new Document\Meta\Builder($this->factory, $this);
     }
 
     /**
      * Adds the built object to the parent if there is any, and return the parent
-     * @return IBuilder
+     * @return Document\IBuilder
      * @throws InvalidDocumentLevelWrite
      */
     public function addToParent()
     {
-        if (null === $this->builder)
+        if (null === $this->builder) {
             throw new InvalidDocumentLevelWrite;
-        $this->builder->addLinksCollection(
+        }
+
+        $this->builder->setLinksCollection(
             $this->factory->createLinksCollection($this->links)
         );
+        $this->resetStructure();
 
         return $this->builder;
+    }
+
+    /**
+     * @return void
+     */
+    private function resetStructure()
+    {
+        $this->structure = [
+            Document\Links::FIELD_NAME => null,
+            Document\Links::FIELD_HREF => null,
+            Document\Links::FIELD_META => null
+        ];
     }
 }

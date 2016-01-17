@@ -98,9 +98,9 @@ class Error implements IRecursively
         $this->id = $id;
         $this->links = $links;
         $this->status = $status;
-        $this->code = $code;
-        $this->title = $title;
-        $this->detail = $detail;
+        $this->code = (string) $code;
+        $this->title = (string) $title;
+        $this->detail = (string) $detail;
         $this->source = $source;
         $this->meta = $meta;
     }

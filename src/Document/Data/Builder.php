@@ -15,7 +15,7 @@ use Json\Document\Relationships;
  * Class Builder
  * @package Json\Data
  */
-class Builder implements Document\IBuilder
+class Builder implements Document\Builder\LinksInterface, Document\Builder\MetaInterface, Document\Builder\RelationshipsInterface
 {
     /**
      * @var IFactory
@@ -31,25 +31,22 @@ class Builder implements Document\IBuilder
      * The JSON Document data structure
      * @var array
      */
-    private $structure = [
-        Data::FIELD_TYPE => null,
-        Data::FIELD_ID => null,
-        Data::FIELD_ATTRIBUTES => null,
-        Data::FIELD_RELATIONSHIPS => null,
-        Data::FIELD_LINKS => null,
-        Data::FIELD_META => null
-    ];
+    private $structure;
+
+    /**
+     * @var Data[]
+     */
+    private $dataCollection = [];
 
     /**
      * @param IFactory $factory
      * @param Document\IBuilder $builder
      */
-    public function __construct(
-        IFactory $factory,
-        Document\IBuilder $builder = null
-    ) {
+    public function __construct(IFactory $factory, Document\IBuilder $builder = null)
+    {
         $this->factory = $factory;
         $this->builder = $builder;
+        $this->resetStructure();
     }
 
     /**
@@ -111,9 +108,7 @@ class Builder implements Document\IBuilder
      * @param Relationships\Collection $relationshipsCollection
      * @return Builder
      */
-    public function addRelationshipsCollection(
-        Relationships\Collection $relationshipsCollection
-    )
+    public function setRelationshipsCollection(Relationships\Collection $relationshipsCollection)
     {
         $this->structure[Data::FIELD_RELATIONSHIPS] = $relationshipsCollection;
 
@@ -132,7 +127,7 @@ class Builder implements Document\IBuilder
      * @param Links\Collection $linksCollection
      * @return Builder
      */
-    public function addLinksCollection(Links\Collection $linksCollection)
+    public function setLinksCollection(Links\Collection $linksCollection)
     {
         $this->structure[Data::FIELD_LINKS] = $linksCollection;
 
@@ -151,7 +146,7 @@ class Builder implements Document\IBuilder
      * @param Meta\Collection $metaCollection
      * @return Builder
      */
-    public function addMetaCollection(Meta\Collection $metaCollection)
+    public function setMetaCollection(Meta\Collection $metaCollection)
     {
         $this->structure[Data::FIELD_META] = $metaCollection;
 
@@ -159,21 +154,47 @@ class Builder implements Document\IBuilder
     }
 
     /**
+     * @return Builder
+     */
+    public function addData()
+    {
+        $this->dataCollection[] = $this->factory->createData(
+            $this->structure[Data::FIELD_TYPE],
+            $this->structure[Data::FIELD_ID],
+            $this->structure[Data::FIELD_ATTRIBUTES],
+            $this->structure[Data::FIELD_RELATIONSHIPS],
+            $this->structure[Data::FIELD_LINKS],
+            $this->structure[Data::FIELD_META]
+        );
+        $this->resetStructure();
+
+        return $this;
+    }
+
+    /**
+     * @return void
+     */
+    private function resetStructure()
+    {
+        $this->structure = [
+            Data::FIELD_TYPE => null,
+            Data::FIELD_ID => null,
+            Data::FIELD_ATTRIBUTES => null,
+            Data::FIELD_RELATIONSHIPS => null,
+            Data::FIELD_LINKS => null,
+            Data::FIELD_META => null
+        ];
+    }
+
+    /**
      * Adds the built object to the parent if there is any, and return the parent
      * @throws InvalidDocumentLevelWrite
-     * @return IBuilder
+     * @return Document\Builder\DataInterface
      */
     public function addToParent()
     {
-        $this->builder->addDataCollection(
-            $this->factory->createData(
-                $this->structure[Data::FIELD_TYPE],
-                $this->structure[Data::FIELD_ID],
-                $this->structure[Data::FIELD_ATTRIBUTES],
-                $this->structure[Data::FIELD_RELATIONSHIPS],
-                $this->structure[Data::FIELD_LINKS],
-                $this->structure[Data::FIELD_META]
-            )
+        $this->builder->setDataCollection(
+            $this->factory->createDataCollection($this->dataCollection)
         );
 
         return $this->builder;

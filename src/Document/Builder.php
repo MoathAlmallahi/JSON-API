@@ -46,12 +46,12 @@ class Builder implements IBuilder
     }
 
     /**
-     * @param IRecursively $data
+     * @param Data\Collection $data
      * @return Builder
      */
-    public function addDataCollection(IRecursively $data)
+    public function setDataCollection(Data\Collection $data)
     {
-        $this->document[Document::FIELD_DATA][] = $data;
+        $this->document[Document::FIELD_DATA] = $data;
 
         return $this;
     }
@@ -68,7 +68,7 @@ class Builder implements IBuilder
      * @param Error\Collection $errorsCollection
      * @return Builder
      */
-    public function addErrorsCollection(Error\Collection $errorsCollection)
+    public function setErrorsCollection(Error\Collection $errorsCollection)
     {
         $this->document[Document::FIELD_ERRORS] = $errorsCollection;
 
@@ -87,7 +87,7 @@ class Builder implements IBuilder
      * @param Meta\Collection $metaCollection
      * @return Builder
      */
-    public function addMetaCollection(Meta\Collection $metaCollection)
+    public function setMetaCollection(Meta\Collection $metaCollection)
     {
         $this->document[Document::FIELD_META] = $metaCollection;
 
@@ -98,7 +98,7 @@ class Builder implements IBuilder
      * @param Links\Collection $linksCollection
      * @return Builder
      */
-    public function addLinksCollection(Links\Collection $linksCollection)
+    public function setLinksCollection(Links\Collection $linksCollection)
     {
         $this->document[Document::FIELD_LINKS] = $linksCollection;
 
@@ -117,7 +117,7 @@ class Builder implements IBuilder
      * @param Included\Collection $includedCollection
      * @return Builder
      */
-    public function addIncludedCollection(Included\Collection $includedCollection)
+    public function setIncludedCollection(Included\Collection $includedCollection)
     {
         $this->document[Document::FIELD_INCLUDED] = $includedCollection;
 
@@ -139,8 +139,7 @@ class Builder implements IBuilder
     public function getDocument()
     {
         return $this->factory->createDocument(
-            null !== $this->document[Document::FIELD_DATA] ?
-                $this->factory->createDataCollection($this->document[Document::FIELD_DATA]) : null,
+            $this->document[Document::FIELD_DATA],
             $this->document[Document::FIELD_ERRORS],
             $this->document[Document::FIELD_META],
             $this->document[Document::FIELD_LINKS],

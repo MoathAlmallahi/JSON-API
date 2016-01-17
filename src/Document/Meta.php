@@ -11,7 +11,6 @@ use Json\IRecursively;
  */
 class Meta implements IRecursively
 {
-
     /**
      * @var string
      */
@@ -30,9 +29,7 @@ class Meta implements IRecursively
      */
     public function __construct($name, $value)
     {
-        if (
-            empty($value) || empty($name) || !is_string($name) || (is_object($value) && empty((array)$value))
-        ) {
+        if (empty($value) || empty($name) || !is_string($name) || (is_object($value) && empty((array)$value))) {
             throw new InvalidMetaException;
         }
 
@@ -71,6 +68,8 @@ class Meta implements IRecursively
      */
     public function getAsArray()
     {
-        return [$this->getName() => is_object($this->getValue()) ? (array)$this->getValue() : $this->getValue()];
+        return [
+            $this->getName() => is_object($this->getValue()) ? (array) $this->getValue() : $this->getValue()
+        ];
     }
 }

@@ -3,7 +3,7 @@
 namespace Json\Document\Included;
 
 use Json\Document\AbstractCollection;
-use Json\Document\Data;
+use Json\Document\Included;
 
 /**
  * Class Collection
@@ -13,11 +13,11 @@ class Collection extends AbstractCollection
 {
     const COLLECTION_NAME = 'included';
     /**
-     * @param Data\Collection $element
+     * @param Included $element
      * @return bool
      */
     protected function validateType($element)
     {
-        return ($element instanceof Data);
+        return ($element instanceof Included);
     }
 }

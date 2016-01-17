@@ -3,6 +3,7 @@
 namespace Json;
 
 use Json\Document\Error;
+use Json\Document\Included;
 use Json\Exceptions\InvalidLinkException;
 use Json\Document\Links;
 use Json\Document\Meta;
@@ -16,7 +17,6 @@ use Json\Document\Error\Source;
  */
 class Factory implements IFactory
 {
-
     /**
      * @param string $name
      * @param string $href
@@ -197,5 +197,34 @@ class Factory implements IFactory
         Document\Meta\Collection $meta = null
     ) {
         return new Error($id, $status, $code, $title, $detail, $source, $links, $meta);
+    }
+
+    /**
+     * @param Included[] $included
+     * @return Included\Collection
+     */
+    public function createIncludedCollection(array $included)
+    {
+        return new Included\Collection($included);
+    }
+
+    /**
+     * @param string|null $type
+     * @param string|int|null $id
+     * @param array|null $attributes
+     * @param Relationships\Collection|null $relationships
+     * @param Links\Collection|null $links
+     * @param Meta\Collection|null $meta
+     * @return Included
+     */
+    public function createIncluded(
+        $type = null,
+        $id = null,
+        array $attributes = null,
+        Relationships\Collection $relationships = null,
+        Links\Collection $links = null,
+        Meta\Collection $meta = null
+    ) {
+        return new Included($type, $id, $attributes, $relationships, $links, $meta);
     }
 }

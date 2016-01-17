@@ -14,6 +14,7 @@ use Json\Document\Meta\Collection as MetaCollection;
  */
 class Relationships implements IRecursively
 {
+    const FIELD_NAME = 'name';
     const FIELD_LINKS = Data::FIELD_LINKS;
     const FIELD_DATA = Data::FIELD_DATA;
     const FIELD_META = Data::FIELD_META;

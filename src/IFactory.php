@@ -3,6 +3,7 @@
 namespace Json;
 
 use Json\Document\Error;
+use Json\Document\Included;
 use Json\Exceptions\InvalidLinkException;
 use Json\Document\Data;
 use Json\Document\Links;
@@ -19,11 +20,12 @@ interface IFactory
 
     /**
      * @param string|null $type
-     * @param mixed $id
+     * @param string|int $id
      * @param array $attributes
      * @param \Json\Document\Relationships\Collection $relationships
      * @param \Json\Document\Links\Collection $links
      * @param \Json\Document\Meta\Collection $meta
+     * @return Data
      */
     public function createData(
         $type = null,
@@ -31,7 +33,8 @@ interface IFactory
         array $attributes = null,
         Relationships\Collection $relationships = null,
         Links\Collection $links = null,
-        Meta\Collection $meta = null);
+        Meta\Collection $meta = null
+    );
 
     /**
      * @param string $name
@@ -138,5 +141,29 @@ interface IFactory
         Source $source = null,
         Document\Links\Collection $links = null,
         Document\Meta\Collection $meta = null
+    );
+
+    /**
+     * @param Included[] $included
+     * @return Included\Collection
+     */
+    public function createIncludedCollection(array $included);
+
+    /**
+     * @param string|null $type
+     * @param string|int|null $id
+     * @param array|null $attributes
+     * @param Relationships\Collection|null $relationships
+     * @param Links\Collection|null $links
+     * @param Meta\Collection|null $meta
+     * @return Included
+     */
+    public function createIncluded(
+        $type = null,
+        $id = null,
+        array $attributes = null,
+        Relationships\Collection $relationships = null,
+        Links\Collection $links = null,
+        Meta\Collection $meta = null
     );
 }
